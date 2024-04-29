@@ -194,34 +194,33 @@ export default function App() {
   }
 
   function chooseCategory(chosenRow) {
-    console.log(dice);
+
     let newRows = rows.map(row => {
       if (row.name === chosenRow.name) {
         const newScore = row.scoringFunction();
-        console.log(newScore);
-        return {...row, isDisabled: true, score: newScore};
+        return { ...row, isDisabled: true, score: newScore };
       } else {
         return row;
       }
     });
-
-    calculateBonus(newRows);
-    calculateTotal(newRows);
-
+  
+    const bonus = calculateBonus(newRows);
+    const total = calculateTotal(newRows);
+  
     newRows = newRows.map(row => {
       if (row.name === 'Bonus') {
-        return {...row, score: calculateBonus(newRows)};
+        return { ...row, score: bonus };
       } else if (row.name === 'Total') {
-        return {...row, score: calculateTotal(newRows)};
+        return { ...row, score: total };
       } else {
         return row;
       }
     });
-
+  
     setRows(newRows);
-
-    setRollsLeft(3);
-    rollDice();
+  
+    setDice(initialDiceState());
+    setRollsLeft(2);
   }
 
   function calculateBonus(newRows) {
