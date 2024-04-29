@@ -4,17 +4,17 @@ export default function ScoringChart(props) {
     <tr key={row.name}>
       <td className={
         `px-4 py-2 border-black
-         ${row.isCategory && row.isDisabled ? 'bg-gray-500' : 'bg-green-200'}
-         ${row.isCategory ? 'border border-solid' : ' border-y-2 border-l-2 bg-blue-300 text-2xl font-semibold'}
-         `}
+        ${row.isCategory && row.isDisabled ? 'bg-gray-300 text-slate-500' : row.isDisabled ? 'bg-blue-300 text-2xl font-semibold' : 'bg-green-200'}
+        ${row.isCategory ? 'border border-solid' : ' border-y-2 border-l-2'}
+        `}
       >
         {row.name}
       </td>
       <td className={
         `px-4 py-2 border-black
-         ${row.isCategory && row.isDisabled ? 'bg-gray-500' : 'bg-green-200'}
-         ${row.isCategory ? 'border border-solid' : ' border-y-2 border-r-2 bg-blue-300 text-2xl font-semibold'}
-         `}
+        ${row.isCategory && row.isDisabled ? 'bg-gray-300 text-slate-500' : row.isDisabled ? 'bg-blue-300 text-2xl font-semibold' : 'bg-green-200'}
+        ${row.isCategory ? 'border border-solid' : ' border-y-2 border-r-2'}
+        `}
       >
         <button 
           disabled={row.isDisabled}
