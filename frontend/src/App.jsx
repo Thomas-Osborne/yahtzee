@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { nanoid } from 'nanoid';
 
 import Dice from './components/Dice';
+import ScoringChart from './components/ScoringChart';
 
 export default function App() {
   
@@ -11,8 +12,6 @@ export default function App() {
 
   const [dice, setDice] = useState(initialDiceState());
   const [rollsLeft, setRollsLeft] = useState(MAXIMUM_ROLLS - 1); // first roll occurs automatically
-
-  console.log(rollsLeft);
 
   function initialDiceState() {
     const array = Array.from({ length: TOTAL_DICE });
@@ -47,18 +46,23 @@ export default function App() {
   return (
     <>
       <h1 className="font-semibold text-blue-500 text-5xl text-center p-3">Yahtzee</h1>
-      <div className="flex flex-wrap justify-center">
-        {diceElements}
-      </div>
-      <div className="flex flex-wrap justify-center">
-        <button 
-          className="rounded-lg border border-black bg-green-300 disabled:bg-gray-300 disabled:text-slate-500 px-3 py-2"
-          onClick={rollDice}
-          disabled={rollsLeft <= 0}
-        >
-          <h5>Roll Dice</h5>
-          <p className="text-xs">{rollsLeft} of {MAXIMUM_ROLLS} left</p>
-        </button>
+      <div className="flex flex-row justify-center">
+        <ScoringChart />
+        <div>
+          <div className="flex flex-wrap">
+            {diceElements}
+          </div>
+          <div className="flex justify-center">
+            <button 
+              className="rounded-lg border border-black bg-green-300 disabled:bg-gray-300 disabled:text-slate-500 px-3 py-2"
+              onClick={rollDice}
+              disabled={rollsLeft <= 0}
+            >
+              <h5>Roll Dice</h5>
+              <p className="text-xs">{rollsLeft} of {MAXIMUM_ROLLS} left</p>
+            </button>
+          </div>
+        </div>
       </div>
     </>
   );
