@@ -1,102 +1,16 @@
-export default function ScoringChart() {
+export default function ScoringChart(props) {
 
-  const rowNames = [
-    {
-      name: 'Aces',
-      isDisabled: false,
-      scoringFunction: null,
-      score: 0,
-    },
-    {
-      name: 'Twos',
-      isDisabled: false,
-      scoringFunction: null,
-      score: 0,
-    },
-    {
-      name: 'Threes',
-      isDisabled: false,
-      scoringFunction: null,
-      score: 0,
-    },
-    {
-      name: 'Fours',
-      isDisabled: false,
-      scoringFunction: null,
-      score: 0,
-    },
-    {
-      name: 'Fives',
-      isDisabled: false,
-      scoringFunction: null,
-      score: 0,
-    },
-    {
-      name: 'Sixes',
-      isDisabled: false,
-      scoringFunction: null,
-      score: 0,
-    },
-    {
-      name: 'Bonus',
-      isDisabled: true,
-      scoringFunction: null,
-      score: 0,
-    },
-    {
-      name: 'Three of a Kind',
-      isDisabled: false,
-      scoringFunction: null,
-      score: 0,
-    },
-    {
-      name: 'Four of a Kind',
-      isDisabled: false,
-      scoringFunction: null,
-      score: 0,
-    },
-    {
-      name: 'Full House',
-      isDisabled: false,
-      scoringFunction: null,
-      score: 0,
-    },
-    {
-      name: 'Small Straight',
-      isDisabled: false,
-      scoringFunction: null,
-      score: 0,
-    },
-    {
-      name: 'Large Straight',
-      isDisabled: false,
-      scoringFunction: null,
-      score: 0,
-    },
-    {
-      name: 'Yahtzee',
-      isDisabled: false,
-      scoringFunction: null,
-      score: 0,
-    },
-    {
-      name: 'Chance',
-      isDisabled: false,
-      scoringFunction: null,
-      score: 0,
-    },
-    {
-      name: 'Total',
-      isDisabled: true,
-      scoringFunction: null,
-      score: 0,
-    }
-  ];
-
-  const rowElements = rowNames.map(row => (
+  const rowElements = props.rows.map(row => (
     <tr key={row.name}>
       <td className="border border-black px-4 py-2">{row.name}</td>
-      <td className="border border-black px-4 py-2"><button disabled={row.isDisabled}>0</button></td>
+      <td className="border border-black px-4 py-2">
+        <button 
+          disabled={row.isDisabled}
+          onClick={row.scoringFunction}
+        >
+            0
+        </button>
+      </td>
     </tr>
   ));
 
