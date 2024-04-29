@@ -23,42 +23,42 @@ export default function App() {
       name: 'Aces',
       isCategory: true,
       isDisabled: false,
-      scoringFunction: () => scoreDigits(1),
+      scoringFunction: (dice) => scoreDigits(dice, 1),
       score: 0,
     },
     {
       name: 'Twos',
       isCategory: true,
       isDisabled: false,
-      scoringFunction: () => scoreDigits(2),
+      scoringFunction: (dice) => scoreDigits(dice, 2),
       score: 0,
     },
     {
       name: 'Threes',
       isCategory: true,
       isDisabled: false,
-      scoringFunction: () => scoreDigits(3),
+      scoringFunction: (dice) => scoreDigits(dice, 3),
       score: 0,
     },
     {
       name: 'Fours',
       isCategory: true,
       isDisabled: false,
-      scoringFunction: () => scoreDigits(4),
+      scoringFunction: (dice) => scoreDigits(dice, 4),
       score: 0,
     },
     {
       name: 'Fives',
       isCategory: true,
       isDisabled: false,
-      scoringFunction: () => scoreDigits(5),
+      scoringFunction: (dice) => scoreDigits(dice, 5),
       score: 0,
     },
     {
       name: 'Sixes',
       isCategory: true,
       isDisabled: false,
-      scoringFunction: () => scoreDigits(6),
+      scoringFunction: (dice) => scoreDigits(dice, 6),
       score: 0,
     },
     {
@@ -72,49 +72,49 @@ export default function App() {
       name: 'Three of a Kind',
       isCategory: true,
       isDisabled: false,
-      scoringFunction: () => scoreOfAKind(3, scoreSum(gameState.dice)),
+      scoringFunction: (dice) => scoreOfAKind(dice, 3, scoreSum(dice)),
       score: 0,
     },
     {
       name: 'Four of a Kind',
       isCategory: true,
       isDisabled: false,
-      scoringFunction: () => scoreOfAKind(4, scoreSum(gameState.dice)),
+      scoringFunction: (dice) => scoreOfAKind(dice, 4, scoreSum(dice)),
       score: 0,
     },
     {
       name: 'Full House',
       isCategory: true,
       isDisabled: false,
-      scoringFunction: () => scoreFullHouse(3, 2, 25),
+      scoringFunction: (dice) => scoreFullHouse(dice, 3, 2, 25),
       score: 0,
     },
     {
       name: 'Small Straight',
       isCategory: true,
       isDisabled: false,
-      scoringFunction: () => scoreStraight(4, 30),
+      scoringFunction: (dice) => scoreStraight(dice, 4, 30),
       score: 0,
     },
     {
       name: 'Large Straight',
       isCategory: true,
       isDisabled: false,
-      scoringFunction: () => scoreStraight(5, 40),
+      scoringFunction: (dice) => scoreStraight(dice, 5, 40),
       score: 0,
     },
     {
       name: 'Yahtzee',
       isCategory: true,
       isDisabled: false,
-      scoringFunction: () => scoreOfAKind(4, 50), // Yahtzee scores 50 points
+      scoringFunction: (dice) => scoreOfAKind(dice, 4, 50), // Yahtzee scores 50 points
       score: 0,
     },
     {
       name: 'Chance',
       isCategory: true,
       isDisabled: false,
-      scoringFunction: () => scoreSum(gameState.dice),
+      scoringFunction: (dice) => scoreSum(dice),
       score: 0,
     },
     {
@@ -133,16 +133,17 @@ export default function App() {
     );
   }
 
-  function scoreDigits(value) {
-    const filteredByValue = gameState.dice.filter(die => die.value === value);
+  function scoreDigits(dice, value) {
+    const filteredByValue = dice.filter(die => die.value === value);
     return scoreSum(filteredByValue);
   }
 
-  function scoreOfAKind(quantity, points) {
+  function scoreOfAKind(dice, quantity, points) {
+    // Iterates through to find the largest number of duplicates in the array
     let maximumOccurrences = 0;
 
     for (let i = 1; i <= TOTAL_DICE_FACES; i++) {
-      const ithOccurrences = gameState.dice.filter(die => die.value === i).length;
+      const ithOccurrences = dice.filter(die => die.value === i).length;
       if (ithOccurrences > maximumOccurrences) {
         maximumOccurrences = ithOccurrences;
       }
@@ -151,12 +152,13 @@ export default function App() {
     return maximumOccurrences >= quantity ? points : 0;
   }
 
-  function scoreFullHouse(maximumQuantity, secondMaximumQuantity, points) {
+  function scoreFullHouse(dice, maximumQuantity, secondMaximumQuantity, points) {
+    // Finds the biggest and second biggest amounts of any (distinct) numbers to check that a full house is viable
     let maximumOccurrences = 0;
     let secondMaximumOccurrences = 0;
 
     for (let i = 1; i <= TOTAL_DICE_FACES; i++) {
-      const ithOccurrences = gameState.dice.filter(die => die.value === i).length;
+      const ithOccurrences = dice.filter(die => die.value === i).length;
       if (ithOccurrences >= maximumOccurrences) {
         secondMaximumOccurrences = maximumOccurrences;
         maximumOccurrences = ithOccurrences;
@@ -173,8 +175,8 @@ export default function App() {
 
   }
 
-  function scoreStraight(quantity, points) {
-    const sortedUniqueDice = [... new Set(gameState.dice.map(dice => dice.value))]
+  function scoreStraight(dice, quantity, points) {
+    const sortedUniqueDice = [... new Set(dice.map(die => die.value))]
       .sort((a, b) => a - b); // Set in spread operator gives only unique values before sorting
 
     // Base case where there are too many duplicate dice values
@@ -182,6 +184,7 @@ export default function App() {
       return 0;
     }
 
+    // Check consecutive dice values
     for (let i = 0; i <= sortedUniqueDice.length - quantity; i++) {
       let straightFound = true;
       for (let j = 1; j < quantity; j++) {
@@ -198,10 +201,9 @@ export default function App() {
   }
 
   function chooseCategory(chosenRow) {
-
     let newRows = rows.map(row => {
       if (row.name === chosenRow.name) {
-        const newScore = row.scoringFunction();
+        const newScore = row.scoringFunction(gameState.dice);
         return { ...row, isDisabled: true, score: newScore };
       } else {
         return row;
