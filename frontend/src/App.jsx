@@ -10,26 +10,20 @@ export default function App() {
   const MAXIMUM_ROLLS = 3;
 
   const [dice, setDice] = useState(initialDiceState());
-  const [rollsLeft, setRollsLeft] = useState(MAXIMUM_ROLLS);
+  const [rollsLeft, setRollsLeft] = useState(MAXIMUM_ROLLS - 1); // first roll occurs automatically
 
-  useEffect(() => {
-    rollDice(dice);
-  }, []);
+  console.log(rollsLeft);
 
   function initialDiceState() {
     const array = Array.from({ length: TOTAL_DICE });
     return array.map(_ => rollSingleDice()); // eslint-disable-line no-unused-vars
   }
 
-  function pressRoll() {
-    rollDice();
-    setRollsLeft(prevRolesLeft => prevRolesLeft - 1);
-  }
-
   function rollDice() {
     setDice(prevDice => prevDice.map(die => {
       return die.isHeld ? die : rollSingleDice();
     }));
+    setRollsLeft(prevRolesLeft => prevRolesLeft - 1);
   }
 
   function rollSingleDice() {
@@ -59,7 +53,7 @@ export default function App() {
       <div className="flex flex-wrap justify-center">
         <button 
           className="rounded-lg border border-black bg-green-300 disabled:bg-gray-300 disabled:text-slate-500 px-3 py-2"
-          onClick={pressRoll}
+          onClick={rollDice}
           disabled={rollsLeft <= 0}
         >
           <h5>Roll Dice</h5>
