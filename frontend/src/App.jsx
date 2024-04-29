@@ -11,7 +11,11 @@ export default function App() {
   const MAXIMUM_ROLLS = 3;
   const upper = {threshold: 63, bonus: 35};
 
-  const [dice, setDice] = useState(initialDiceState());
+  const [gameState, setGameState] = useState({
+    dice: initialDiceState(),
+    rollsLeft: MAXIMUM_ROLLS - 1
+  });
+
   const [rollsLeft, setRollsLeft] = useState(MAXIMUM_ROLLS - 1); // first roll occurs automatically
 
   const [rows, setRows] = useState([
@@ -68,14 +72,14 @@ export default function App() {
       name: 'Three of a Kind',
       isCategory: true,
       isDisabled: false,
-      scoringFunction: () => scoreOfAKind(3, scoreSum(dice)),
+      scoringFunction: () => scoreOfAKind(3, scoreSum(gameState.dice)),
       score: 0,
     },
     {
       name: 'Four of a Kind',
       isCategory: true,
       isDisabled: false,
-      scoringFunction: () => scoreOfAKind(4, scoreSum(dice)),
+      scoringFunction: () => scoreOfAKind(4, scoreSum(gameState.dice)),
       score: 0,
     },
     {
@@ -110,7 +114,7 @@ export default function App() {
       name: 'Chance',
       isCategory: true,
       isDisabled: false,
-      scoringFunction: () => scoreSum(dice),
+      scoringFunction: () => scoreSum(gameState.dice),
       score: 0,
     },
     {
@@ -122,15 +126,15 @@ export default function App() {
     }
   ]);
 
-  function scoreSum(subDice) {
+  function scoreSum(scoringDice) {
     return (
-      subDice.map(die => die.value)
+      scoringDice.map(die => die.value)
         .reduce((a, b) => a + b, 0)
     );
   }
 
   function scoreDigits(value) {
-    const filteredByValue = dice.filter(die => die.value === value);
+    const filteredByValue = gameState.dice.filter(die => die.value === value);
     return scoreSum(filteredByValue);
   }
 
@@ -138,7 +142,7 @@ export default function App() {
     let maximumOccurrences = 0;
 
     for (let i = 1; i <= TOTAL_DICE_FACES; i++) {
-      const ithOccurrences = dice.filter(die => die.value === i).length;
+      const ithOccurrences = gameState.dice.filter(die => die.value === i).length;
       if (ithOccurrences > maximumOccurrences) {
         maximumOccurrences = ithOccurrences;
       }
@@ -152,7 +156,7 @@ export default function App() {
     let secondMaximumOccurrences = 0;
 
     for (let i = 1; i <= TOTAL_DICE_FACES; i++) {
-      const ithOccurrences = dice.filter(die => die.value === i).length;
+      const ithOccurrences = gameState.dice.filter(die => die.value === i).length;
       if (ithOccurrences >= maximumOccurrences) {
         secondMaximumOccurrences = maximumOccurrences;
         maximumOccurrences = ithOccurrences;
@@ -170,7 +174,7 @@ export default function App() {
   }
 
   function scoreStraight(quantity, points) {
-    const sortedUniqueDice = [... new Set(dice.map(dice => dice.value))]
+    const sortedUniqueDice = [... new Set(gameState.dice.map(dice => dice.value))]
       .sort((a, b) => a - b); // Set in spread operator gives only unique values before sorting
 
     // Base case where there are too many duplicate dice values
@@ -219,7 +223,10 @@ export default function App() {
   
     setRows(newRows);
   
-    setDice(initialDiceState());
+    setGameState({
+      dice: initialDiceState(),
+      rollsLeft: MAXIMUM_ROLLS - 1
+    });
     setRollsLeft(2);
   }
 
@@ -255,10 +262,13 @@ export default function App() {
   }
 
   function rollDice() {
-    setDice(prevDice => prevDice.map(die => {
-      return die.isHeld ? die : rollSingleDice();
+    setGameState(prevGameState => ({
+      ...prevGameState,
+      dice: prevGameState.dice.map(die => {
+        return die.isHeld ? die : rollSingleDice();
+      }),
+      rollsLeft: prevGameState.rollsLeft - 1
     }));
-    setRollsLeft(prevRolesLeft => prevRolesLeft - 1);
   }
 
   function rollSingleDice() {
@@ -271,13 +281,15 @@ export default function App() {
   }
   
   function holdDice(id) {
-    setDice(prevDice => prevDice.map(die => (
-      die.id === id ? {...die, isHeld: !die.isHeld} : die
-    )));
-
+    setGameState(prevGameState => ({
+      ...prevGameState,
+      dice: prevGameState.dice.map(die => (
+        die.id === id ? {...die, isHeld: !die.isHeld} : die
+      ))
+    }));
   }
 
-  const diceElements = dice.map(die => <Dice key={die.id} value={die.value} isHeld={die.isHeld} toggleHold={() => holdDice(die.id)}/>);
+  const diceElements = gameState.dice.map(die => <Dice key={die.id} value={die.value} isHeld={die.isHeld} toggleHold={() => holdDice(die.id)}/>);
 
   return (
     <>
