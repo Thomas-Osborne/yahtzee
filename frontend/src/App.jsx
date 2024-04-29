@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { nanoid } from 'nanoid';
 
 import Dice from './components/Dice';
@@ -9,6 +9,7 @@ export default function App() {
   const TOTAL_DICE = 5;
   const TOTAL_DICE_FACES = 6;
   const MAXIMUM_ROLLS = 3;
+  const upper = {threshold: 63, bonus: 35};
 
   const [dice, setDice] = useState(initialDiceState());
   const [rollsLeft, setRollsLeft] = useState(MAXIMUM_ROLLS - 1); // first roll occurs automatically
@@ -189,21 +190,38 @@ export default function App() {
       }
     }));
 
-    sumRows();
+    calculateBonus();
+    calculateTotal();
 
     setRollsLeft(3);
     rollDice();
   }
 
-  function sumRows() {
+  function calculateBonus() {
+    const upperRows = ['Aces', 'Twos', 'Threes', 'Fours', 'Fives', 'Sixes'];
+    const sumUpperValues = rows
+      .filter(row => upperRows.includes(row.name))
+      .map(row => row.score)
+      .reduce((a, b) => a + b, 0);
+
+    if (sumUpperValues >= upper.threshold) {
+      updateRowValue('Bonus', sumUpperValues);
+    }
+  }
+
+  function calculateTotal() {
     const sumRowValues = rows
       .filter(row => row.name !== 'Total')
       .map(row => row.score)
       .reduce((a, b) => a + b, 0);
   
+    updateRowValue('Total', sumRowValues);
+  }
+
+  function updateRowValue(name, value) {
     setRows(prevRows =>
       prevRows.map(row =>
-        row.name === 'Total' ? { ...row, score: sumRowValues } : row
+        row.name === name ? { ...row, score: value } : row
       )
     );
   }
