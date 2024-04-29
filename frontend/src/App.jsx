@@ -13,7 +13,7 @@ export default function App() {
   const [dice, setDice] = useState(initialDiceState());
   const [rollsLeft, setRollsLeft] = useState(MAXIMUM_ROLLS - 1); // first roll occurs automatically
 
-  const rows = [
+  const [rows, setRows] = useState([
     {
       name: 'Aces',
       isDisabled: false,
@@ -104,7 +104,7 @@ export default function App() {
       scoringFunction: null,
       score: 0,
     }
-  ];
+  ]);
 
   function scoreSum(subDice) {
     return (
