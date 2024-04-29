@@ -17,113 +17,7 @@ export default function App() {
     isEnded: false,
   });
 
-  const [rows, setRows] = useState([
-    {
-      name: 'Aces',
-      isCategory: true,
-      isDisabled: false,
-      scoringFunction: (dice) => scoreDigits(dice, 1),
-      score: 0,
-    },
-    {
-      name: 'Twos',
-      isCategory: true,
-      isDisabled: false,
-      scoringFunction: (dice) => scoreDigits(dice, 2),
-      score: 0,
-    },
-    {
-      name: 'Threes',
-      isCategory: true,
-      isDisabled: false,
-      scoringFunction: (dice) => scoreDigits(dice, 3),
-      score: 0,
-    },
-    {
-      name: 'Fours',
-      isCategory: true,
-      isDisabled: false,
-      scoringFunction: (dice) => scoreDigits(dice, 4),
-      score: 0,
-    },
-    {
-      name: 'Fives',
-      isCategory: true,
-      isDisabled: false,
-      scoringFunction: (dice) => scoreDigits(dice, 5),
-      score: 0,
-    },
-    {
-      name: 'Sixes',
-      isCategory: true,
-      isDisabled: false,
-      scoringFunction: (dice) => scoreDigits(dice, 6),
-      score: 0,
-    },
-    {
-      name: 'Bonus',
-      isCategory: false,
-      isDisabled: true,
-      scoringFunction: null,
-      score: 0,
-    },
-    {
-      name: 'Three of a Kind',
-      isCategory: true,
-      isDisabled: false,
-      scoringFunction: (dice) => scoreOfAKind(dice, 3, scoreSum(dice)),
-      score: 0,
-    },
-    {
-      name: 'Four of a Kind',
-      isCategory: true,
-      isDisabled: false,
-      scoringFunction: (dice) => scoreOfAKind(dice, 4, scoreSum(dice)),
-      score: 0,
-    },
-    {
-      name: 'Full House',
-      isCategory: true,
-      isDisabled: false,
-      scoringFunction: (dice) => scoreFullHouse(dice, 3, 2, 25),
-      score: 0,
-    },
-    {
-      name: 'Small Straight',
-      isCategory: true,
-      isDisabled: false,
-      scoringFunction: (dice) => scoreStraight(dice, 4, 30),
-      score: 0,
-    },
-    {
-      name: 'Large Straight',
-      isCategory: true,
-      isDisabled: false,
-      scoringFunction: (dice) => scoreStraight(dice, 5, 40),
-      score: 0,
-    },
-    {
-      name: 'Yahtzee',
-      isCategory: true,
-      isDisabled: false,
-      scoringFunction: (dice) => scoreOfAKind(dice, 4, 50), // Yahtzee scores 50 points
-      score: 0,
-    },
-    {
-      name: 'Chance',
-      isCategory: true,
-      isDisabled: false,
-      scoringFunction: (dice) => scoreSum(dice),
-      score: 0,
-    },
-    {
-      name: 'Total',
-      isCategory: false,
-      isDisabled: true,
-      scoringFunction: null,
-      score: 0,
-    }
-  ]);
+  const [rows, setRows] = useState(initialRowState());
 
   function scoreSum(scoringDice) {
     return (
@@ -271,6 +165,118 @@ export default function App() {
     return array.map(element => rollSingleDice()); // eslint-disable-line no-unused-vars
   }
 
+  function initialRowState() {
+    return (
+      [
+        {
+          name: 'Aces',
+          isCategory: true,
+          isDisabled: false,
+          scoringFunction: (dice) => scoreDigits(dice, 1),
+          score: 0,
+        },
+        {
+          name: 'Twos',
+          isCategory: true,
+          isDisabled: false,
+          scoringFunction: (dice) => scoreDigits(dice, 2),
+          score: 0,
+        },
+        {
+          name: 'Threes',
+          isCategory: true,
+          isDisabled: false,
+          scoringFunction: (dice) => scoreDigits(dice, 3),
+          score: 0,
+        },
+        {
+          name: 'Fours',
+          isCategory: true,
+          isDisabled: false,
+          scoringFunction: (dice) => scoreDigits(dice, 4),
+          score: 0,
+        },
+        {
+          name: 'Fives',
+          isCategory: true,
+          isDisabled: false,
+          scoringFunction: (dice) => scoreDigits(dice, 5),
+          score: 0,
+        },
+        {
+          name: 'Sixes',
+          isCategory: true,
+          isDisabled: false,
+          scoringFunction: (dice) => scoreDigits(dice, 6),
+          score: 0,
+        },
+        {
+          name: 'Bonus',
+          isCategory: false,
+          isDisabled: true,
+          scoringFunction: null,
+          score: 0,
+        },
+        {
+          name: 'Three of a Kind',
+          isCategory: true,
+          isDisabled: false,
+          scoringFunction: (dice) => scoreOfAKind(dice, 3, scoreSum(dice)),
+          score: 0,
+        },
+        {
+          name: 'Four of a Kind',
+          isCategory: true,
+          isDisabled: false,
+          scoringFunction: (dice) => scoreOfAKind(dice, 4, scoreSum(dice)),
+          score: 0,
+        },
+        {
+          name: 'Full House',
+          isCategory: true,
+          isDisabled: false,
+          scoringFunction: (dice) => scoreFullHouse(dice, 3, 2, 25),
+          score: 0,
+        },
+        {
+          name: 'Small Straight',
+          isCategory: true,
+          isDisabled: false,
+          scoringFunction: (dice) => scoreStraight(dice, 4, 30),
+          score: 0,
+        },
+        {
+          name: 'Large Straight',
+          isCategory: true,
+          isDisabled: false,
+          scoringFunction: (dice) => scoreStraight(dice, 5, 40),
+          score: 0,
+        },
+        {
+          name: 'Yahtzee',
+          isCategory: true,
+          isDisabled: false,
+          scoringFunction: (dice) => scoreOfAKind(dice, 4, 50), // Yahtzee scores 50 points
+          score: 0,
+        },
+        {
+          name: 'Chance',
+          isCategory: true,
+          isDisabled: false,
+          scoringFunction: (dice) => scoreSum(dice),
+          score: 0,
+        },
+        {
+          name: 'Total',
+          isCategory: false,
+          isDisabled: true,
+          scoringFunction: null,
+          score: 0,
+        }
+      ]
+    );
+  }
+
   function rollDice() {
     setGameState(prevGameState => ({
       ...prevGameState,
@@ -299,6 +305,16 @@ export default function App() {
     }));
   }
 
+  function resetGame() {
+    setGameState({
+      dice: initialDiceState(),
+      rollsLeft: MAXIMUM_ROLLS - 1, // first roll occurs immediately
+      isEnded: false,
+    });
+
+    setRows(initialRowState());
+  }
+
   const diceElements = gameState.dice.map(die => <Dice key={die.id} value={die.value} isHeld={die.isHeld} toggleHold={() => holdDice(die.id)}/>);
 
   return (
@@ -310,16 +326,29 @@ export default function App() {
           <div className="flex flex-wrap">
             {diceElements}
           </div>
-          <div className="flex justify-center">
+          <div className="text-center">
+            {gameState.isEnded && <h6 className="py-1">Game over!</h6>}
             <button 
               className="rounded-lg border border-black bg-green-300 disabled:bg-gray-300 disabled:text-slate-500 px-3 py-2"
-              onClick={rollDice}
+              onClick={
+                gameState.isEnded 
+                  ? resetGame
+                  : rollDice
+              }
               disabled={gameState.rollsLeft <= 0}
             >
-              <h5>Roll Dice</h5>
-              <p className="text-xs">{gameState.rollsLeft} of {MAXIMUM_ROLLS} left</p>
+              {gameState.isEnded 
+                ?
+                <div>
+                  <h5>Play Again</h5>
+                </div>
+                :
+                <div>
+                  <h5>Roll Dice</h5>
+                  <p className="text-xs">{gameState.rollsLeft} of {MAXIMUM_ROLLS} left</p>
+                </div>
+              }
             </button>
-            {gameState.isEnded && <h6>Game over!</h6>}
           </div>
         </div>
       </div>
