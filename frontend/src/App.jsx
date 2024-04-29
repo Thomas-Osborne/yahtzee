@@ -117,12 +117,21 @@ export default function App() {
     });
   
     setRows(newRows);
+
+    const isEnded = isGameOver(newRows);
+    if (isEnded) {
+      const highScore = localStorage.getItem('highScore');
+
+      if (total > highScore || !highScore) {
+        localStorage.setItem('highScore', total);
+      }
+    }
   
     setGameState(prevGameState => ({
       ...prevGameState,
       dice: initialDiceState(),
       rollsLeft: MAXIMUM_ROLLS - 1,
-      isEnded: isGameOver(newRows)
+      isEnded: isEnded
     }));
   }
 
@@ -341,6 +350,7 @@ export default function App() {
                 ?
                 <div>
                   <h5>Play Again</h5>
+                  <p className="text-xs">Your high score is {localStorage.getItem('highScore')}!</p>
                 </div>
                 :
                 <div>
