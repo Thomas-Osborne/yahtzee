@@ -127,10 +127,11 @@ export default function App() {
       }
     }
   
+    // only reroll if game is not over
     setGameState(prevGameState => ({
       ...prevGameState,
-      dice: initialDiceState(),
-      rollsLeft: MAXIMUM_ROLLS - 1,
+      dice: isEnded ? prevGameState.dice : initialDiceState(),
+      rollsLeft: isEnded ? prevGameState.rollsLeft : MAXIMUM_ROLLS - 1,
       isEnded: isEnded
     }));
   }
