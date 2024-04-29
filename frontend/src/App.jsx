@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { nanoid } from 'nanoid';
 
 import Dice from './components/Dice';
@@ -122,6 +122,11 @@ export default function App() {
     }
   ]);
 
+  useEffect(() => {
+    calculateBonus();
+    calculateTotal();
+  }, [rows]);
+
   function scoreSum(subDice) {
     return (
       subDice.map(die => die.value)
@@ -204,9 +209,6 @@ export default function App() {
         return row;
       }
     }));
-
-    calculateBonus();
-    calculateTotal();
 
     setRollsLeft(3);
     rollDice();
