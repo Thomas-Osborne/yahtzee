@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { nanoid } from 'nanoid';
 
 import Dice from './components/Dice';
@@ -71,7 +71,7 @@ export default function App() {
     {
       name: 'Full House',
       isDisabled: false,
-      scoringFunction: () => scoreFullHouse(3, 2, 20),
+      scoringFunction: () => scoreFullHouse(3, 2, 25),
       score: 0,
     },
     {
@@ -127,26 +127,26 @@ export default function App() {
         maximumOccurrences = ithOccurrences;
       }
     }
-
+    
     return maximumOccurrences >= quantity ? points : 0;
   }
 
   function scoreFullHouse(maximumQuantity, secondMaximumQuantity, points) {
-    let maximumOccurences = 0;
-    let secondMaximumOccurences = 0;
+    let maximumOccurrences = 0;
+    let secondMaximumOccurrences = 0;
 
     for (let i = 1; i <= TOTAL_DICE_FACES; i++) {
-      const ithOccurences = dice.filter(die => die.value === i).length;
-      if (ithOccurences >= maximumOccurences) {
-        secondMaximumOccurences = maximumOccurences;
-        maximumOccurences = ithOccurences;
-      } else if (ithOccurences > secondMaximumOccurences) {
-        secondMaximumOccurences = ithOccurences;
+      const ithOccurrences = dice.filter(die => die.value === i).length;
+      if (ithOccurrences >= maximumOccurrences) {
+        secondMaximumOccurrences = maximumOccurrences;
+        maximumOccurrences = ithOccurrences;
+      } else if (ithOccurrences > secondMaximumOccurrences) {
+        secondMaximumOccurrences = ithOccurrences;
       }
     }
   
     return (
-      maximumOccurences >= maximumQuantity && secondMaximumOccurences >= secondMaximumQuantity 
+      maximumOccurrences >= maximumQuantity && secondMaximumOccurrences >= secondMaximumQuantity 
         ? points
         : 0
     );
@@ -177,9 +177,10 @@ export default function App() {
     return 0;
   }
 
-  function updateScore(name) {
+  function chooseCategory(chosenRow) {
+    console.log(dice);
     setRows(prevRows => prevRows.map(row => {
-      if (row.name === name) {
+      if (row.name === chosenRow.name) {
         const newScore = row.scoringFunction();
         console.log(newScore);
         return {...row, isDisabled: true, score: newScore};
@@ -187,12 +188,30 @@ export default function App() {
         return row;
       }
     }));
+
+    sumRows();
+
+    setRollsLeft(3);
+    rollDice();
+  }
+
+  function sumRows() {
+    const sumRowValues = rows
+      .filter(row => row.name !== 'Total')
+      .map(row => row.score)
+      .reduce((a, b) => a + b, 0);
+  
+    setRows(prevRows =>
+      prevRows.map(row =>
+        row.name === 'Total' ? { ...row, score: sumRowValues } : row
+      )
+    );
   }
 
 
   function initialDiceState() {
     const array = Array.from({ length: TOTAL_DICE });
-    return array.map(_ => rollSingleDice()); // eslint-disable-line no-unused-vars
+    return array.map(element => rollSingleDice()); // eslint-disable-line no-unused-vars
   }
 
   function rollDice() {
@@ -224,7 +243,7 @@ export default function App() {
     <>
       <h1 className="font-semibold text-blue-500 text-5xl text-center p-3">Yahtzee</h1>
       <div className="flex flex-row justify-center">
-        <ScoringChart rows={rows} updateScore={updateScore}/>
+        <ScoringChart rows={rows} chooseCategory={chooseCategory}/>
         <div>
           <div className="flex flex-wrap">
             {diceElements}
