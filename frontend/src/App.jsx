@@ -7,8 +7,10 @@ export default function App() {
   
   const TOTAL_DICE = 5;
   const TOTAL_DICE_FACES = 6;
+  const MAXIMUM_ROLLS = 3;
 
   const [dice, setDice] = useState(initialDiceState());
+  const [rollsLeft, setRollsLeft] = useState(MAXIMUM_ROLLS);
 
   useEffect(() => {
     rollDice(dice);
@@ -16,7 +18,12 @@ export default function App() {
 
   function initialDiceState() {
     const array = Array.from({ length: TOTAL_DICE });
-    return array.map(element => rollSingleDice());
+    return array.map(_ => rollSingleDice()); // eslint-disable-line no-unused-vars
+  }
+
+  function pressRoll() {
+    rollDice();
+    setRollsLeft(prevRolesLeft => prevRolesLeft - 1);
   }
 
   function rollDice() {
@@ -51,10 +58,12 @@ export default function App() {
       </div>
       <div className="flex flex-wrap justify-center">
         <button 
-          className="rounded-lg border border-black bg-green-300 px-3 py-2"
-          onClick={rollDice}
+          className="rounded-lg border border-black bg-green-300 disabled:bg-gray-300 disabled:text-slate-500 px-3 py-2"
+          onClick={pressRoll}
+          disabled={rollsLeft <= 0}
         >
-          Roll Dice
+          <h5>Roll Dice</h5>
+          <p className="text-xs">{rollsLeft} of {MAXIMUM_ROLLS} left</p>
         </button>
       </div>
     </>
