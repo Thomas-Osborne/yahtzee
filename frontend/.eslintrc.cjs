@@ -5,15 +5,15 @@ module.exports = {
     'eslint:recommended',
     'plugin:react/recommended',
     'plugin:react/jsx-runtime',
-    'plugin:react-hooks/recommended',
   ],
   ignorePatterns: ['dist', '.eslintrc.cjs'],
   parserOptions: { ecmaVersion: 'latest', sourceType: 'module' },
   settings: { react: { version: '18.2' } },
   plugins: ['react-refresh'],
   rules: {
-    "indent": ["error", 4],
+    "indent": ["error", 2],
     "semi": ["error", "always"],
     "quotes": ["error", "single"],
+    "react/prop-types": "off"
   },
 }
