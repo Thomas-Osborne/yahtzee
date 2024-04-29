@@ -13,10 +13,8 @@ export default function App() {
 
   const [gameState, setGameState] = useState({
     dice: initialDiceState(),
-    rollsLeft: MAXIMUM_ROLLS - 1
+    rollsLeft: MAXIMUM_ROLLS - 1 // first roll occurs immediately
   });
-
-  const [rollsLeft, setRollsLeft] = useState(MAXIMUM_ROLLS - 1); // first roll occurs automatically
 
   const [rows, setRows] = useState([
     {
@@ -229,7 +227,6 @@ export default function App() {
       dice: initialDiceState(),
       rollsLeft: MAXIMUM_ROLLS - 1
     });
-    setRollsLeft(2);
   }
 
   function calculateBonus(newRows) {
@@ -306,10 +303,10 @@ export default function App() {
             <button 
               className="rounded-lg border border-black bg-green-300 disabled:bg-gray-300 disabled:text-slate-500 px-3 py-2"
               onClick={rollDice}
-              disabled={rollsLeft <= 0}
+              disabled={gameState.rollsLeft <= 0}
             >
               <h5>Roll Dice</h5>
-              <p className="text-xs">{rollsLeft} of {MAXIMUM_ROLLS} left</p>
+              <p className="text-xs">{gameState.rollsLeft} of {MAXIMUM_ROLLS} left</p>
             </button>
           </div>
         </div>
