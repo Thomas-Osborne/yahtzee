@@ -5,7 +5,6 @@ import Dice from './components/Dice';
 import ScoringChart from './components/ScoringChart';
 
 export default function App() {
-  
   const TOTAL_DICE = 5;
   const TOTAL_DICE_FACES = 6;
   const MAXIMUM_ROLLS = 3;
