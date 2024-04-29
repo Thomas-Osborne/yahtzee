@@ -6,9 +6,9 @@ export default function ScoringChart(props) {
       <td className="border border-black px-4 py-2">
         <button 
           disabled={row.isDisabled}
-          onClick={row.scoringFunction}
+          onClick={() => props.updateScore(row.name)}
         >
-            0
+          {row.score}
         </button>
       </td>
     </tr>

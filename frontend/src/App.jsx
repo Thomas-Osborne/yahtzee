@@ -177,7 +177,17 @@ export default function App() {
     return 0;
   }
 
-
+  function updateScore(name) {
+    setRows(prevRows => prevRows.map(row => {
+      if (row.name === name) {
+        const newScore = row.scoringFunction();
+        console.log(newScore);
+        return {...row, isDisabled: true, score: newScore};
+      } else {
+        return row;
+      }
+    }));
+  }
 
 
   function initialDiceState() {
@@ -214,7 +224,7 @@ export default function App() {
     <>
       <h1 className="font-semibold text-blue-500 text-5xl text-center p-3">Yahtzee</h1>
       <div className="flex flex-row justify-center">
-        <ScoringChart rows={rows}/>
+        <ScoringChart rows={rows} updateScore={updateScore}/>
         <div>
           <div className="flex flex-wrap">
             {diceElements}
