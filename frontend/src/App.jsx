@@ -195,7 +195,7 @@ export default function App() {
 
   function chooseCategory(chosenRow) {
     console.log(dice);
-    setRows(prevRows => prevRows.map(row => {
+    let newRows = rows.map(row => {
       if (row.name === chosenRow.name) {
         const newScore = row.scoringFunction();
         console.log(newScore);
@@ -203,42 +203,50 @@ export default function App() {
       } else {
         return row;
       }
-    }));
+    });
 
-    calculateBonus();
-    calculateTotal();
+    calculateBonus(newRows);
+    calculateTotal(newRows);
+
+    newRows = newRows.map(row => {
+      if (row.name === 'Bonus') {
+        return {...row, score: calculateBonus(newRows)};
+      } else if (row.name === 'Total') {
+        return {...row, score: calculateTotal(newRows)};
+      } else {
+        return row;
+      }
+    });
+
+    setRows(newRows);
 
     setRollsLeft(3);
     rollDice();
   }
 
-  function calculateBonus() {
+  function calculateBonus(newRows) {
     const upperRows = ['Aces', 'Twos', 'Threes', 'Fours', 'Fives', 'Sixes'];
-    const sumUpperValues = rows
+    const sumUpperValues = newRows
       .filter(row => upperRows.includes(row.name))
       .map(row => row.score)
       .reduce((a, b) => a + b, 0);
 
+
     if (sumUpperValues >= upper.threshold) {
-      updateRowValue('Bonus', sumUpperValues);
+      return upper.bonus;
+    } else {
+      return 0;
     }
+
   }
 
-  function calculateTotal() {
-    const sumRowValues = rows
-      .filter(row => row.name !== 'Total')
+  function calculateTotal(newRows) {
+    const sumRowValues = newRows
+      .filter(row => row.isCategory)
       .map(row => row.score)
       .reduce((a, b) => a + b, 0);
-  
-    updateRowValue('Total', sumRowValues);
-  }
 
-  function updateRowValue(name, value) {
-    setRows(prevRows =>
-      prevRows.map(row =>
-        row.name === name ? { ...row, score: value } : row
-      )
-    );
+    return sumRowValues;
   }
 
 
