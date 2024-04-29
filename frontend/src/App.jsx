@@ -13,7 +13,8 @@ export default function App() {
 
   const [gameState, setGameState] = useState({
     dice: initialDiceState(),
-    rollsLeft: MAXIMUM_ROLLS - 1 // first roll occurs immediately
+    rollsLeft: MAXIMUM_ROLLS - 1, // first roll occurs immediately
+    isEnded: false,
   });
 
   const [rows, setRows] = useState([
@@ -223,10 +224,12 @@ export default function App() {
   
     setRows(newRows);
   
-    setGameState({
+    setGameState(prevGameState => ({
+      ...prevGameState,
       dice: initialDiceState(),
-      rollsLeft: MAXIMUM_ROLLS - 1
-    });
+      rollsLeft: MAXIMUM_ROLLS - 1,
+      isEnded: isGameOver(newRows)
+    }));
   }
 
   function calculateBonus(newRows) {
@@ -252,6 +255,14 @@ export default function App() {
       .reduce((a, b) => a + b, 0);
 
     return sumRowValues;
+  }
+
+  function isGameOver(newRows) {
+    if (newRows.filter(row => !row.isDisabled).length > 0) {
+      return false;
+    } else {
+      return true;
+    }
   }
 
 
@@ -308,6 +319,7 @@ export default function App() {
               <h5>Roll Dice</h5>
               <p className="text-xs">{gameState.rollsLeft} of {MAXIMUM_ROLLS} left</p>
             </button>
+            {gameState.isEnded && <h6>Game over!</h6>}
           </div>
         </div>
       </div>
